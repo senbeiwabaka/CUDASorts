@@ -9,6 +9,7 @@ public:
 	void insertionSort(int arr[],int arrLength);
 	void selectionSort(int arr[],int arrSize);
 	void setSize(int s);
+	void iterMerge(int arr[], int size);
 
 private:
 	void merge(int arr[],int tempArr[],int x,int mid,int y);

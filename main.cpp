@@ -7,11 +7,11 @@
 
 using namespace std;
 
-extern "C" void call(char* name);
+extern "C" void call(const char* name);
 
 const int SIZE=10;
 
-char* choice(int s);
+const char* choice(int s);
 
 int main(int argc, char **argv){
     int quickArr[SIZE]={4,10,3,1,5,9,7,8,6,2};
@@ -19,6 +19,7 @@ int main(int argc, char **argv){
     int mergeTemp[SIZE];
     int insertArr[SIZE]={2,1,9,3,8,10,4,7,6,5};
     int selectArr[SIZE]={1,10,2,9,3,8,4,7,5,6};
+	int iterMergeArr[SIZE]={10,1,9,2,8,3,7,4,6,5};
 
 	Sorting s = Sorting(SIZE);
 
@@ -73,9 +74,20 @@ int main(int argc, char **argv){
         cout<<selectArr[i]<<" ";
     }
 
+	//Iterative Merge sort
+    cout<<"\n\nIterative Merge Sort Before: ";
+    for(int i=0;i<SIZE;i++){
+        cout<<iterMergeArr[i]<<" ";
+    }
+    s.iterMerge(iterMergeArr,SIZE);
+    cout<<"\nIterative Merge Sort After:  ";
+    for(int i=0;i<SIZE;i++){
+        cout<<iterMergeArr[i]<<" ";
+    }
+
 	cout << endl;
 
-	cout << "which algorithm do you want to sort by on the GPU? " << endl;
+	cout << "which algorithm do you want to sort by? " << endl;
 	cout << "1 quick \n2 merge \n3 insertion \n4 selection" << endl;
 
 	int selection;
@@ -87,7 +99,7 @@ int main(int argc, char **argv){
     return 0;
 }
 
-char* choice(int s){
+const char* choice(int s){
 	if(s == 1)
 	{
 		return "quick";

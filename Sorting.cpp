@@ -105,3 +105,31 @@ void Sorting::setSize(int s)
 {
 	Size = s;
 }
+
+void Sorting::iterMerge(int arr[], int size){
+	int inc,left,leftMax,right,rightMax,cur;
+    int *temp = new int[size];
+    inc=1;
+    while(inc<size){
+        left=0;
+        right=inc;
+        leftMax=right-1;
+        rightMax=(leftMax+inc<size)?leftMax+inc:size-1;
+        cur=0;
+        while(cur<size){
+            while(left<=leftMax && right<=rightMax){
+                if(arr[right]<arr[left]){temp[cur]=arr[right++];}
+                else{temp[cur]=arr[left++];}
+                cur++;
+            }
+            while(right<=rightMax){temp[cur++]=arr[right++];}
+            while(left<=leftMax){temp[cur++]=arr[left++];}
+            left=right;
+            right+=inc;
+            leftMax=right-1;
+            rightMax=(leftMax+inc<size)?leftMax+inc:size-1;
+        }
+        inc*=2;
+        for(int i=0;i<size;i++){arr[i]=temp[i];}
+    }
+}
