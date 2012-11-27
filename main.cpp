@@ -13,66 +13,71 @@ extern "C" void call(const char* name);
 const int SIZE=10;
 
 template <class T>
-const char* choice(int selection, T* arr, int size, Sorting<T> s){
+const void choice(int selection, int size, Sorting<T> s){
 	if(selection == 1)
 	{
 		//Quick sort
 		cout<<"Quick Sort Before: ";
 		for(int i=0;i<size;i++){
-			cout<<arr[i]<<" ";
+			cout<<s.arrayReturn()[i]<<" ";
 		}
 		cout<<"\nQuick Sort After:  ";
-		s.quickSort(arr, 0, size - 1);
+		s.quickSort(s.arrayReturn(), 0, size - 1);
 		for(int i=0;i<size;i++){
-			cout<<arr[i]<<" ";
+			cout<<s.arrayReturn()[i]<<" ";
 		}
 
-		return "quick";
+		s.resetArrays();
 	}
 	else if(selection == 2)
 	{
 		//Merge sort
 		cout<<"\n\nMerge Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
-		s.iterMerge(arr, size);
+		s.iterMerge(size);
 		cout<<"\nMerge Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
 
-		return "merge";
+		call("merge");
+
+		s.resetArrays();
 	}
 	else if(selection == 3)
 	{
 		//Insertion sort
 		cout<<"\n\nInsertion Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
-		s.insertionSort(arr,size);
+		s.insertionSort(size);
 		cout<<"\nInsertion Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
 
-		return "insertion";
+		s.resetArrays();
 	}
-	else
+	else if(selection == 4)
 	{
 		//Selection sort
 		cout<<"\n\nSelection Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
-		s.selectionSort(arr,size);
+		s.selectionSort(size);
 		cout<<"\nSelection Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<arr[i]<<" ";
+		    cout<<s.arrayReturn()[i]<<" ";
 		}
 
-		return "selection";
+		s.resetArrays();
+	}
+	else{
+		cout << "please enter the correct value";
 	}
 }
 
@@ -84,26 +89,35 @@ int main(int argc, char **argv){
 
 	Sorting<int> s = Sorting<int>(intArray, 10);
 
-	
-	Test penis;
-	penis.setChar('a');
-	penis.setNum(10);
-
 	cout << argc << endl;
 	cout << "usuage " << argv[1] << endl;
 
 	cout << endl << endl;
 
-	cout << penis.getChar() << " " << penis.getNum() << endl;
-
 	cout << "which algorithm do you want to sort by? " << endl;
-	cout << "1 quick \n2 merge \n3 insertion \n4 selection" << endl;
+	cout << "1 quick \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
 
-	int selection;
+	int selection = 0;
 
 	cin >> selection;
 	
-	call(choice(selection, intArray, 10, s));
+	while(selection != 0)
+	{
+		if(selection == 1 || selection == 2 || selection == 3 || selection == 4){
+			choice(selection, 10, s);
+
+			cout << "which algorithm do you want to sort by? " << endl;
+			cout << "1 quick \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
+
+			cin >> selection;
+		}
+		else{
+			cout << "which algorithm do you want to sort by? " << endl;
+			cout << "1 quick \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
+
+			cin >> selection;
+		}
+	}
     
     return 0;
 }
