@@ -1,32 +1,31 @@
+#include <iomanip>
 #include "kernel.cu"
 
-__global__ void MergeKernel(int *result, int f)
-{
-	*result = Rec(f);
+__global__ void MergeKernel(){
 }
 
-__global__ void InsertionKernel()
-{
+__global__ void InsertionKernel(){
 }
 
-extern "C" void call(char* name)
-{
-	int f = 10;
-	int *result;
-	cudaMalloc((void**)&result, sizeof(int));
-	cudaMalloc((void**)&f, sizeof(int));
-	MergeKernel<<<1,1>>>(result, f);
+__global__ void QuickKernel(){
 }
 
-__device__ void GPUquickSort(int arr[],int l,int r)
-{
-
+__global__ void SelectionKernel(){
 }
 
-__device__ int Rec(int f)
-{
-	if(f==0)
-	{
-		return 1;
-	}
+extern "C" void call(const char* name){
+	char *n = new char[strlen(name)+1];
+	strcpy(n, name);
+	printf("name %s", n);
+}
+
+__device__ void GPUquickSort(int arr[],int l,int r){
+	int i = l, j = r, temp;
+	int piv = arr[(l + r)/ 2];
+}
+
+__device__ void GPUinsertionSort(int arr[], int arrLength){
+}
+
+__device__ void GPUselectionSort(int arr[], int arrSize){
 }
