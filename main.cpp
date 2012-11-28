@@ -33,8 +33,6 @@ const void choice(const char selection, int size, Sorting<T>* s){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
-		call("merge");
-
 		(*s).resetArrays();
 	}
 	else if(selection == '3')
