@@ -18,7 +18,7 @@ public:
 		delete[] sorted;
 	}
 
-	void bubbleSort(int size){
+	/*void bubbleSort(int size){
             bool swap=true;
             int x=0,temp;
 
@@ -34,7 +34,7 @@ public:
                     }
                 }
             }
-        }
+        }*/
 
 	void insertionSort(int size){
 		int j, temp;
