@@ -16,16 +16,7 @@ template <class T>
 const void choice(const char selection, int size, Sorting<T>* s){
 	if(selection == '1')
 	{
-		//Quick sort
-		cout<<"Quick Sort Before: ";
-		for(int i=0;i<size;i++){
-			cout<<(*s).arrayReturn()[i]<<" ";
-		}
-		cout<<"\nQuick Sort After:  ";
-		(*s).quickSort((*s).arrayReturn(), 0, size - 1);
-		for(int i=0;i<size;i++){
-			cout<<(*s).arrayReturn()[i]<<" ";
-		}
+		//Bubble sort
 
 		(*s).resetArrays();
 	}
