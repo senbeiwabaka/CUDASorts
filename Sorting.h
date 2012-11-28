@@ -18,25 +18,23 @@ public:
 		delete[] sorted;
 	}
 
-	void quickSort(T* values, int l, int r){
-		int i=l,j=r,temp;
-		int piv=values[(l+r)/2];
-		
-		while(i<=j){
-		    while(values[i]<piv){i++;}
-		    while(values[j]>piv){j--;}
-		    if(i<=j){
-		        temp=values[i];
-		        values[i]=values[j];
-		        values[j]=temp;
-		        i++;
-		        j--;
-		    }
-		}
+	void bubbleSort(int size){
+            bool swap=true;
+            int x=0,temp;
 
-		if(l<j){quickSort(values,l,j);}
-		if(i<r){quickSort(values,i,r);}
-	}
+            while(swap){
+                swap=false;
+                x++;
+                for(int i=0;i<size-x;i++){
+                    if(sorted[i]>sorted[i+1]){
+                        temp=sorted[i];
+                        sorted[i]=sorted[i+1];
+                        sorted[i+1]=temp;
+                        swap=true;
+                    }
+                }
+            }
+        }
 
 	void insertionSort(int size){
 		int j, temp;
