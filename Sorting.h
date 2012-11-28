@@ -14,6 +14,8 @@ public:
 	}
 
 	~Sorting(void){
+		delete[] unsorted;
+		delete[] sorted;
 	}
 
 	void quickSort(T* values, int l, int r){

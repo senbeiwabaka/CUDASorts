@@ -13,68 +13,68 @@ extern "C" void call(const char* name);
 const int SIZE=10;
 
 template <class T>
-const void choice(int selection, int size, Sorting<T> s){
-	if(selection == 1)
+const void choice(const char selection, int size, Sorting<T>* s){
+	if(selection == '1')
 	{
 		//Quick sort
 		cout<<"Quick Sort Before: ";
 		for(int i=0;i<size;i++){
-			cout<<s.arrayReturn()[i]<<" ";
+			cout<<(*s).arrayReturn()[i]<<" ";
 		}
 		cout<<"\nQuick Sort After:  ";
-		s.quickSort(s.arrayReturn(), 0, size - 1);
+		(*s).quickSort((*s).arrayReturn(), 0, size - 1);
 		for(int i=0;i<size;i++){
-			cout<<s.arrayReturn()[i]<<" ";
+			cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
-		s.resetArrays();
+		(*s).resetArrays();
 	}
-	else if(selection == 2)
+	else if(selection == '2')
 	{
 		//Merge sort
 		cout<<"\n\nMerge Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		s.iterMerge(size);
+		(*s).iterMerge(size);
 		cout<<"\nMerge Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
 		call("merge");
 
-		s.resetArrays();
+		(*s).resetArrays();
 	}
-	else if(selection == 3)
+	else if(selection == '3')
 	{
 		//Insertion sort
 		cout<<"\n\nInsertion Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		s.insertionSort(size);
+		(*s).insertionSort(size);
 		cout<<"\nInsertion Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
-		s.resetArrays();
+		(*s).resetArrays();
 	}
-	else if(selection == 4)
+	else if(selection == '4')
 	{
 		//Selection sort
 		cout<<"\n\nSelection Sort Before: ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		s.selectionSort(size);
+		(*s).selectionSort(size);
 		cout<<"\nSelection Sort After:  ";
 		for(int i=0;i<size;i++){
-		    cout<<s.arrayReturn()[i]<<" ";
+		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
-		s.resetArrays();
+		(*s).resetArrays();
 	}
 	else{
 		cout << "please enter the correct value";
@@ -87,7 +87,7 @@ int main(int argc, char **argv){
     float floatArray[SIZE]={9,7,2,6,3,10,4,1,5,8};
     char charArray[SIZE]={2,1,9,3,8,10,4,7,6,5};
 
-	Sorting<int> s = Sorting<int>(intArray, 10);
+	Sorting<int>* s = new Sorting<int>(intArray, 10);
 
 	cout << argc << endl;
 	cout << "usuage " << argv[1] << endl;
@@ -97,13 +97,13 @@ int main(int argc, char **argv){
 	cout << "which algorithm do you want to sort by? " << endl;
 	cout << "1 quick \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
 
-	int selection = 0;
+	char selection = 0;
 
 	cin >> selection;
 	
-	while(selection != 0)
+	while(selection != '0')
 	{
-		if(selection == 1 || selection == 2 || selection == 3 || selection == 4){
+		if(selection == '1' || selection == '2' || selection == '3' || selection == '4'){
 			choice(selection, 10, s);
 
 			cout << "which algorithm do you want to sort by? " << endl;
