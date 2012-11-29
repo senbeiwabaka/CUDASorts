@@ -111,7 +111,7 @@ public:
 
 	void resetArrays()
 	{
-		cout<<arrSize << endl;
+		//cout<<arrSize << endl;
 		for(int i = 0; i < arrSize; ++i){
 			sorted[i] = unsorted[i];
 		}
