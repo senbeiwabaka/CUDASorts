@@ -17,6 +17,15 @@ const void choice(const char selection, int size, Sorting<T>* s){
 	if(selection == '1')
 	{
 		//Bubble sort
+		cout<<"\nBubble Sort Before: ";
+		for(int i=0;i<size;i++){
+		    cout<<(*s).arrayReturn()[i]<<" ";
+		}
+		(*s).bubbleSort(size);
+		cout<<"\nBubble Sort After:  ";
+		for(int i=0;i<size;i++){
+		    cout<<(*s).arrayReturn()[i]<<" ";
+		}
 
 		(*s).resetArrays();
 	}
