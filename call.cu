@@ -7,7 +7,7 @@ __global__ void MergeKernel(){
 __global__ void InsertionKernel(){
 }
 
-__global__ void QuickKernel(){
+__global__ void BubbleKernel(){
 }
 
 __global__ void SelectionKernel(){
@@ -19,13 +19,13 @@ extern "C" void call(const char* name){
 	printf("name %s", n);
 }
 
-__device__ void GPUquickSort(int arr[],int l,int r){
+__device__ void GPUBubbleSort(int arr[],int l,int r){
 	int i = l, j = r, temp;
 	int piv = arr[(l + r)/ 2];
 }
 
-__device__ void GPUinsertionSort(int arr[], int arrLength){
+__device__ void GPUInsertionSort(int arr[], int arrLength){
 }
 
-__device__ void GPUselectionSort(int arr[], int arrSize){
+__device__ void GPUSelectionSort(int arr[], int arrSize){
 }
