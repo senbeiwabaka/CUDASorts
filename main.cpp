@@ -22,7 +22,7 @@ const void choice(const char selection, int size, Sorting<T>* s){
 		for(int i=0;i<size;i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		(*s).bubbleSort(size);
+		(*s).bubbleSort();
 		cout<<"\nBubble Sort After:  ";
 		for(int i=0;i<size;i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
@@ -85,8 +85,9 @@ int main(int argc, char *argv[]){
     int intArray[10]={4,10,3,1,5,9,7,8,6,2};
     float floatArray[10]={9,7,2,6,3,10,4,1,5,8};
     char charArray[10]={2,1,9,3,8,10,4,7,6,5};
+	int* iarr;
 
-	Sorting<int>* s = new Sorting<int>(intArray, 10);
+	Sorting<int>* s; //= new Sorting<int>(intArray, 10);
 
 	if(argc == 2)
 	{
@@ -104,20 +105,34 @@ int main(int argc, char *argv[]){
 		{
 			cout << argv[1] << endl;
 			ifstream myfile (argv[1]);
+			int s;
 			if(myfile.is_open())
 			{
 				string line;
 
-				while(myfile.good())
+				myfile >> line >> s;
+
+				cout << line << " " << s << endl;
+
+				if(line == "int")
 				{
-					getline(myfile, line);
-					cout << line << endl;
+					iarr = new int[s];
+				}
+
+				for(int i = 0; i < s; ++i){
+					myfile >> iarr[i];
 				}
 			}
 
 			myfile.close();
+
+			for(int i = 0; i < s; ++i){
+				cout << iarr[i];
+			}
 		}
 	}
+
+	s = new Sorting<int>(iarr, 16);
 
 	cout << endl << endl;
 
@@ -145,6 +160,8 @@ int main(int argc, char *argv[]){
 			cin >> selection;
 		}
 	}
+
+	delete[] iarr;
     
     return 0;
 }
