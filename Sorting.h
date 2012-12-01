@@ -18,14 +18,14 @@ public:
 		delete[] sorted;
 	}
 
-	void bubbleSort(int size){
+	void bubbleSort(){
             bool swap=true;
             int x=0,temp;
 
             while(swap){
                 swap=false;
                 x++;
-                for(int i=0;i<size-x;i++){
+                for(int i=0;i<arrSize-x;i++){
                     if(sorted[i]>sorted[i+1]){
                         temp=sorted[i];
                         sorted[i]=sorted[i+1];
@@ -38,7 +38,7 @@ public:
 
 	void insertionSort(int size){
 		int j, temp;
-		for(int i = 1; i < size; ++i){
+		for(int i = 1; i < arrSize; ++i){
 			j = i;
 			while(j > 0 && sorted[j - 1] > sorted[j]){
 				temp = sorted[j];
@@ -51,9 +51,9 @@ public:
 
 	void selectionSort(int size){
 		int index, temp;
-		for(int i = 0; i < size; ++i){
+		for(int i = 0; i < arrSize; ++i){
 			index = i;
-			for(int j = i + 1; j < size; ++j){
+			for(int j = i + 1; j < arrSize; ++j){
 				if(sorted[j] < sorted[index]){
 					index = j;
 				}
@@ -68,15 +68,15 @@ public:
 
 	void iterMerge(int size){
 		int inc,left,leftMax,right,rightMax,cur;
-		int *temp = new T[size];
+		int *temp = new T[arrSize];
 		inc = 1;
-		while(inc < size){
+		while(inc < arrSize){
 		    left = 0;
 		    right = inc;
 		    leftMax = right - 1;
-		    rightMax = (leftMax + inc < size) ? leftMax + inc : size - 1;
+		    rightMax = (leftMax + inc < arrSize) ? leftMax + inc : arrSize - 1;
 		    cur = 0;
-		    while(cur < size){
+		    while(cur < arrSize){
 		        while(left <= leftMax && right <= rightMax){
 		            if(sorted[right] < sorted[left]){
 						temp[cur]=sorted[right++];
@@ -95,10 +95,10 @@ public:
 		        left=right;
 		        right+=inc;
 		        leftMax=right-1;
-		        rightMax=(leftMax+inc<size)?leftMax+inc:size-1;
+		        rightMax=(leftMax+inc<arrSize)?leftMax+inc:arrSize-1;
 		    }
 		    inc*=2;
-		    for(int i=0;i<size;i++){
+		    for(int i=0;i<arrSize;i++){
 				sorted[i]=temp[i];
 			}
 		}
