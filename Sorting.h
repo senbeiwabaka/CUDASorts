@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SORTING_H_
+#define __SORTING_H_
 
 template <class T>
 class Sorting
@@ -36,7 +37,7 @@ public:
             }
         }
 
-	void insertionSort(int size){
+	void insertionSort(){
 		int j, temp;
 		for(int i = 1; i < arrSize; ++i){
 			j = i;
@@ -49,7 +50,7 @@ public:
 		}
 	}
 
-	void selectionSort(int size){
+	void selectionSort(){
 		int index, temp;
 		for(int i = 0; i < arrSize; ++i){
 			index = i;
@@ -66,7 +67,7 @@ public:
 		}
 	}
 
-	void iterMerge(int size){
+	void iterMerge(){
 		int inc,left,leftMax,right,rightMax,cur;
 		int *temp = new T[arrSize];
 		inc = 1;
@@ -117,6 +118,10 @@ public:
 		}
 	}
 
+	const int Size(){
+		return arrSize;
+	}
+
 
 private:
 	T* unsorted;
@@ -124,3 +129,5 @@ private:
 
 	int arrSize;
 };
+
+#endif
