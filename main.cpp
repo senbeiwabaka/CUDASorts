@@ -1,4 +1,4 @@
-#include <Windows.h>
+//#include <Windows.h>
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
@@ -6,70 +6,77 @@
 #include <cuda.h>
 #include <string>
 #include <fstream>
+#include "call.h"
 #include "Sorting.h"
 #include "Test.h"
 
 using namespace std;
 
-extern "C" void call(const char* name);
-
 template <class T>
-const void choice(const char selection, int size, Sorting<T>* s){
-	if(selection == '1')
-	{
+const void choice(const char selection, Sorting<T>* s, string type){
+	if(selection == '1'){
 		//Bubble sort
 		cout<<"\nBubble Sort Before: ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
+
 		(*s).bubbleSort();
+
 		cout<<"\nBubble Sort After:  ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
 		(*s).resetArrays();
+
+		if(type=="int")
+			call<T>("bubble", (*s).arrayReturn(), (*s).Size());
+
+		cout<<"\nBubble Sort After:  ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).arrayReturn()[i]<<" ";
+		}
+
+		s->resetArrays();
 	}
-	else if(selection == '2')
-	{
+	else if(selection == '2'){
 		//Merge sort
 		cout<<"\n\nMerge Sort Before: ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		(*s).iterMerge(size);
+		(*s).iterMerge();
 		cout<<"\nMerge Sort After:  ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
 		(*s).resetArrays();
 	}
-	else if(selection == '3')
-	{
+	else if(selection == '3'){
 		//Insertion sort
 		cout<<"\n\nInsertion Sort Before: ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		(*s).insertionSort(size);
+		(*s).insertionSort();
 		cout<<"\nInsertion Sort After:  ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
 		(*s).resetArrays();
 	}
-	else if(selection == '4')
-	{
+	else if(selection == '4'){
 		//Selection sort
 		cout<<"\n\nSelection Sort Before: ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
-		(*s).selectionSort(size);
+		(*s).selectionSort();
 		cout<<"\nSelection Sort After:  ";
-		for(int i=0;i<size;i++){
+		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).arrayReturn()[i]<<" ";
 		}
 
@@ -80,43 +87,38 @@ const void choice(const char selection, int size, Sorting<T>* s){
 	}
 }
 
-
-int main(int argc, char *argv[]){
-    int intArray[10]={4,10,3,1,5,9,7,8,6,2};
+int main(int argc, char** argv)
+{
+	int intArray[10]={4,10,3,1,5,9,7,8,6,2};
     float floatArray[10]={9,7,2,6,3,10,4,1,5,8};
     char charArray[10]={2,1,9,3,8,10,4,7,6,5};
 	int* iarr;
+	string type;
 
-	Sorting<int>* s; //= new Sorting<int>(intArray, 10);
-
-	if(argc == 2)
-	{
+	if(argc == 2){
 		string arg = argv[1];
-		if(arg == "-help" || arg == "-h")
-		{
+		if(arg == "-help" || arg == "-h"){
 			cout << "To use this program you can either run it with a txt file for loading in values for the array " <<
 				"or you can run it without a text file and it will randomly fill the array with ints" << endl;
 
-			Sleep(2000);
+			//Sleep(2000);
 
 			exit(0);
 		}
-		else
-		{
+		else{
 			cout << argv[1] << endl;
 			ifstream myfile (argv[1]);
 			int s;
-			if(myfile.is_open())
-			{
+			if(myfile.is_open()){
 				string line;
 
 				myfile >> line >> s;
 
 				cout << line << " " << s << endl;
 
-				if(line == "int")
-				{
+				if(line == "int"){
 					iarr = new int[s];
+					type = "int";
 				}
 
 				for(int i = 0; i < s; ++i){
@@ -127,10 +129,14 @@ int main(int argc, char *argv[]){
 			myfile.close();
 
 			for(int i = 0; i < s; ++i){
-				cout << iarr[i];
+				cout << iarr[i] << " ";
 			}
 		}
 	}
+
+	if(type=="int")
+	{
+		Sorting<int>* s;
 
 	s = new Sorting<int>(iarr, 16);
 
@@ -143,10 +149,9 @@ int main(int argc, char *argv[]){
 
 	cin >> selection;
 	
-	while(selection != '0')
-	{
+	while(selection != '0'){
 		if(selection == '1' || selection == '2' || selection == '3' || selection == '4'){
-			choice(selection, 10, s);
+			choice(selection, s, "int");
 
 			cout << "which algorithm do you want to sort by? " << endl;
 			cout << "1 quick \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
@@ -160,8 +165,8 @@ int main(int argc, char *argv[]){
 			cin >> selection;
 		}
 	}
+	}
 
 	delete[] iarr;
-    
-    return 0;
+	return 0;
 }
