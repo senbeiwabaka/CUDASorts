@@ -31,7 +31,12 @@ const void choice(const char selection, Sorting<T>* s){
 
 		(*s).resetArrays();
 
-		//call<T>("bubble", (*s).toArray(), (*s).Size());
+		cout<<"\nBubble Sort Before: ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<s->toArray()[i]<<" ";
+		}
+
+		call<T>("bubble", (*s).toArray(), (*s).Size());
 
 		cout<<"\nBubble Sort After:  ";
 		for(int i=0;i<s->Size();i++){

@@ -27,14 +27,34 @@ __global__ void InsertionKernel(){
 }
 
 template <class T>
+void createCUDAMem(T* arr, dim3 &block, dim3 &grid, int size, T* cudaArray){
+	cudaMalloc((void**)&cudaArray, sizeof(arr) * size);
+	cudaMemcpy(cudaArray, arr, sizeof(arr) * size, cudaMemcpyHostToDevice);
+}
+
+template <class T>
+void destroyCUDAMem(T* cudaArray, T* arr, int size){
+	cudaMemcpy(arr, cudaArray, sizeof(arr) * size, cudaMemcpyDeviceToHost);
+	cudaFree(cudaArray);
+}
+
+template <class T>
 void call(const char* name, T* arr, int size){
 	char *n = new char[strlen(name)+1];
 	strcpy(n, name);
-	//printf("name %s", n);
+	printf("name %s", n);
+
+	T* cudaArray;
+
+	dim3 block, grid;
+
+	createCUDAMem(arr, block, grid, size, cudaArray);
 
 	if(name == "bubble"){
-		BubbleKernel<T><<<1, 1>>>(size, arr);
+		BubbleKernel<T><<<1, 1>>>(size, cudaArray);
 	}
+
+	destroyCUDAMem(cudaArray, arr, size);
 }
 
 template void
