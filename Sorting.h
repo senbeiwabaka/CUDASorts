@@ -5,13 +5,17 @@ template <class T>
 class Sorting
 {
 public:
-	Sorting(T* values, int size){
+	//template <void>
+	Sorting<T>(T* values, int size){
 		unsorted = values;
 		sorted = new T[size];
 		for(int i = 0; i < size; ++i){
 			sorted[i] = unsorted[i];
 		}
 		arrSize = size;
+	}
+
+	Sorting(){
 	}
 
 	~Sorting(void){
@@ -21,7 +25,8 @@ public:
 
 	void bubbleSort(){
             bool swap=true;
-            int x=0,temp;
+            int x=0;
+			T temp;
 
             while(swap){
                 swap=false;
@@ -69,7 +74,7 @@ public:
 
 	void iterMerge(){
 		int inc,left,leftMax,right,rightMax,cur;
-		int *temp = new T[arrSize];
+		T *temp = new T[arrSize];
 		inc = 1;
 		while(inc < arrSize){
 		    left = 0;
@@ -106,7 +111,7 @@ public:
 		delete[] temp;
 	}
 
-	T* arrayReturn(){
+	T* toArray(){
 		return sorted;
 	}
 

@@ -7,7 +7,8 @@
 template <class T>
 __global__ void BubbleKernel(int size, T* arr){
 	bool swap = true;
-	int x = 0; int temp;
+	int x = 0; 
+	T temp;
 	while(swap){
 		swap = false;
 		x++;
@@ -40,7 +41,7 @@ template void
 call<int>(const char* name, int *arr, int size);
 
 template void
-	call<float>(const char* name, float *arr, int size);
+	call<double>(const char* name, double *arr, int size);
 
 template void
 	call<char>(const char* name, char *arr, int size);
