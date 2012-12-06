@@ -1,8 +1,10 @@
 #ifndef _KERNEL_H_
 #define _KERNEL_H_
 
-#include <iomanip>
+#include <iostream>
 #include "Test.h"
+
+using namespace std;
 
 template <class T>
 __global__ void BubbleKernel(int size, T* arr){
@@ -12,7 +14,7 @@ __global__ void BubbleKernel(int size, T* arr){
 	while(swap){
 		swap = false;
 		x++;
-		for( int i = 0; i < size; i++){
+		for( int i = 0; i < size - x; i++){
 			if(arr[i] > arr[i + 1]){
 				temp = arr[i];
 				arr[i] = arr[i + 1];
@@ -27,22 +29,36 @@ __global__ void InsertionKernel(){
 }
 
 template <class T>
-void createCUDAMem(T* arr, dim3 &block, dim3 &grid, int size, T* cudaArray){
-	cudaMalloc((void**)&cudaArray, sizeof(arr) * size);
-	cudaMemcpy(cudaArray, arr, sizeof(arr) * size, cudaMemcpyHostToDevice);
+void createCUDAMem(T*& arr, dim3 &block, dim3 &grid, int size, T*& cudaArray){
+	cudaMalloc((void**)&cudaArray, sizeof(T) * size);
+	cudaMemcpy(cudaArray, arr, sizeof(T) * size, cudaMemcpyHostToDevice);
+
+	if(cudaArray == 0)
+		cout << "couldn't allocate memory";
+
+	cudaError_t error = cudaGetLastError();
+
+	if(error != cudaSuccess)
+		cout << "Cuda Error: " << cudaGetErrorString(error);
+
+	cout << sizeof(T) * size << " " << sizeof(arr) << endl;
 }
 
 template <class T>
-void destroyCUDAMem(T* cudaArray, T* arr, int size){
-	cudaMemcpy(arr, cudaArray, sizeof(arr) * size, cudaMemcpyDeviceToHost);
-	cudaFree(cudaArray);
+void destroyCUDAMem(T*& cudaArray, T* arr, int size){
+	cudaMemcpy(arr, cudaArray, sizeof(T) * size, cudaMemcpyDeviceToHost);
+	cudaFree(&cudaArray);
 }
 
 template <class T>
 void call(const char* name, T* arr, int size){
-	char *n = new char[strlen(name)+1];
-	strcpy(n, name);
-	printf("name %s", n);
+	for(int i = 0; i < size; ++i){
+		cout << arr[i] << endl;
+	}
+
+	cout << sizeof(arr) << " " << sizeof(T) << " " << sizeof(name) << endl;
+
+	cout << typeid(arr).name() << " " << typeid(T).name() << endl;
 
 	T* cudaArray;
 
@@ -50,11 +66,18 @@ void call(const char* name, T* arr, int size){
 
 	createCUDAMem(arr, block, grid, size, cudaArray);
 
-	if(name == "bubble"){
+	cout << strcmp(name, "bubble");
+
+	if(strcmp(name, "bubble") == 0){
 		BubbleKernel<T><<<1, 1>>>(size, cudaArray);
 	}
 
 	destroyCUDAMem(cudaArray, arr, size);
+
+	cout << "After bubble \n";
+	for(int i = 0; i < size; ++i){
+		cout << arr[i] << endl;
+	}
 }
 
 template void
