@@ -36,12 +36,14 @@ const void choice(const char selection, Sorting<T>* s){
 		    cout<<s->toArray()[i]<<" ";
 		}
 
-		call<T>("bubble", (*s).toArray(), (*s).Size());
+		call<T>("bubble", s->toArray(), (*s).Size());
 
 		cout<<"\nBubble Sort After:  ";
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
+		cout << endl;
 
 		s->resetArrays();
 	}
@@ -51,6 +53,7 @@ const void choice(const char selection, Sorting<T>* s){
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
 		(*s).iterMerge();
 		cout<<"\nMerge Sort After:  ";
 		for(int i=0;i<s->Size();i++){
@@ -58,6 +61,22 @@ const void choice(const char selection, Sorting<T>* s){
 		}
 
 		(*s).resetArrays();
+
+		cout<<"\n\nMerge Sort Before: ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		call<T>("merge", s->toArray(), s->Size());
+
+		cout<<"\nMerge Sort After:  ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		cout << endl;
+
+		s->resetArrays();
 	}
 	else if(selection == '3'){
 		//Insertion sort
@@ -65,13 +84,31 @@ const void choice(const char selection, Sorting<T>* s){
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
 		(*s).insertionSort();
+
 		cout<<"\nInsertion Sort After:  ";
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
 
-		(*s).resetArrays();
+		s->resetArrays();
+
+		cout<<"\n\nInsertion Sort Before: ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		call<T>("insertion", s->toArray(), s->Size());
+
+		cout<<"\nInsertion Sort After:  ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		cout << endl;
+
+		s->resetArrays();
 	}
 	else if(selection == '4'){
 		//Selection sort
@@ -79,13 +116,31 @@ const void choice(const char selection, Sorting<T>* s){
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
 		(*s).selectionSort();
+
 		cout<<"\nSelection Sort After:  ";
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
 
-		(*s).resetArrays();
+		s->resetArrays();
+
+		cout<<"\n\nSelection Sort Before: ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		call<T>("selection", s->toArray(), s->Size());
+
+		cout<<"\nSelection Sort After:  ";
+		for(int i=0;i<s->Size();i++){
+		    cout<<(*s).toArray()[i]<<" ";
+		}
+
+		cout << endl;
+
+		s->resetArrays();
 	}
 	else{
 		cout << "please enter the correct value";
@@ -138,11 +193,212 @@ int main(int argc, char** argv)
 
 					doubleSort = new Sorting<double>(doubleArray, size);
 				}
+				else if(line == "char"){
+					charArray = new char[size];
+
+					for(int i = 0; i < size; ++i){
+						myfile >> charArray[i];
+					}
+
+					charSort = new Sorting<char>(charArray, size);
+				}
 			}
 
 			myfile.close();
+		}
+	}
+	else if(argc == 3){
+		ifstream myfile (argv[1]);
+		int size;
+		if(myfile.is_open()){
+			string line;
+
+			myfile >> line >> size;
+
+			if(line == "int"){
+				intArray = new int[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> intArray[i];
+				}
+
+				intSort = new Sorting<int>(intArray, size);
+			}
+			else if(line == "double"){
+				doubleArray = new double[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> doubleArray[i];
+				}
+
+				doubleSort = new Sorting<double>(doubleArray, size);
+			}
+			else if(line == "char"){
+				charArray = new char[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> charArray[i];
+				}
+
+				charSort = new Sorting<char>(charArray, size);
 			}
 		}
+
+		myfile.close();
+
+		myfile = ifstream(argv[2]);
+		if(myfile.is_open()){
+			string line;
+
+			myfile >> line >> size;
+
+			if(line == "int"){
+				intArray = new int[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> intArray[i];
+				}
+
+				intSort = new Sorting<int>(intArray, size);
+			}
+			else if(line == "double"){
+				doubleArray = new double[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> doubleArray[i];
+				}
+
+				doubleSort = new Sorting<double>(doubleArray, size);
+			}
+			else if(line == "char"){
+				charArray = new char[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> charArray[i];
+				}
+
+				charSort = new Sorting<char>(charArray, size);
+			}
+		}
+
+		myfile.close();
+	}
+	else if(argc == 4){
+		ifstream myfile (argv[1]);
+		int size;
+		if(myfile.is_open()){
+			string line;
+
+			myfile >> line >> size;
+
+			if(line == "int"){
+				intArray = new int[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> intArray[i];
+				}
+
+				intSort = new Sorting<int>(intArray, size);
+			}
+			else if(line == "double"){
+				doubleArray = new double[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> doubleArray[i];
+				}
+
+				doubleSort = new Sorting<double>(doubleArray, size);
+			}
+			else if(line == "char"){
+				charArray = new char[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> charArray[i];
+				}
+
+				charSort = new Sorting<char>(charArray, size);
+			}
+		}
+
+		myfile.close();
+
+		myfile = ifstream(argv[2]);
+		if(myfile.is_open()){
+			string line;
+
+			myfile >> line >> size;
+
+			if(line == "int"){
+				intArray = new int[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> intArray[i];
+				}
+
+				intSort = new Sorting<int>(intArray, size);
+			}
+			else if(line == "double"){
+				doubleArray = new double[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> doubleArray[i];
+				}
+
+				doubleSort = new Sorting<double>(doubleArray, size);
+			}
+			else if(line == "char"){
+				charArray = new char[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> charArray[i];
+				}
+
+				charSort = new Sorting<char>(charArray, size);
+			}
+		}
+
+		myfile.close();
+
+		myfile = ifstream(argv[3]);
+		if(myfile.is_open()){
+			string line;
+
+			myfile >> line >> size;
+
+			if(line == "int"){
+				intArray = new int[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> intArray[i];
+				}
+
+				intSort = new Sorting<int>(intArray, size);
+			}
+			else if(line == "double"){
+				doubleArray = new double[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> doubleArray[i];
+				}
+
+				doubleSort = new Sorting<double>(doubleArray, size);
+			}
+			else if(line == "char"){
+				charArray = new char[size];
+
+				for(int i = 0; i < size; ++i){
+					myfile >> charArray[i];
+				}
+
+				charSort = new Sorting<char>(charArray, size);
+			}
+		}
+
+		myfile.close();
+	}
+	else{
+	}
+
 
 	cout << "which algorithm do you want to sort by? " << endl;
 	cout << "1 bubble \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
@@ -189,13 +445,16 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if(intArray != NULL)
-	{
+	if(intArray != NULL){
 		delete[] intArray;
 	}
 
 	if(doubleArray != NULL){
 		delete[] doubleArray;
+	}
+
+	if(charArray != NULL){
+		delete[] charArray;
 	}
 
 	return 0;
