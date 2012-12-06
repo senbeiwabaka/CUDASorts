@@ -43,7 +43,8 @@ public:
         }
 
 	void insertionSort(){
-		int j, temp;
+		int j;
+		T temp;
 		for(int i = 1; i < arrSize; ++i){
 			j = i;
 			while(j > 0 && sorted[j - 1] > sorted[j]){
@@ -56,7 +57,8 @@ public:
 	}
 
 	void selectionSort(){
-		int index, temp;
+		int index;
+		T temp;
 		for(int i = 0; i < arrSize; ++i){
 			index = i;
 			for(int j = i + 1; j < arrSize; ++j){
