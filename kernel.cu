@@ -26,7 +26,19 @@ __global__ void BubbleKernel(int size, T* arr){
 	}
 }
 
-__global__ void InsertionKernel(){
+template <class T>
+__global__ void InsertionKernel(int size, T* arr){
+	int j;
+	T temp;
+	for(int i = 1; i < size; ++i){
+		j = i;
+		while(j > 0 && arr[j - 1] > arr[j]){
+			temp = arr[j];
+			arr[j] = arr[j - 1];
+			arr[j - 1] = temp;
+			j--;
+		}
+	}
 }
 
 template <class T>
@@ -68,6 +80,27 @@ __global__ void IterMergeKernel(int size, T* arr){
 	}
 
 	delete[] temp;
+
+	printf("hello");
+}
+
+template <class T>
+__global__ void SelectionKernel(int size, T* arr){
+	int index;
+	T temp;
+	for(int i = 0; i < size; ++i){
+		index = i;
+		for(int j = i + 1; j < size; ++j){
+			if(arr[j] < arr[index]){
+				index = j;
+			}
+		}
+		if(index != i){
+			temp = arr[i];
+			arr[i] = arr[index];
+			arr[index] = temp;
+		}
+	}
 }
 
 template <class T>
@@ -85,9 +118,9 @@ void createCUDAMem(T*& arr, dim3 &block, dim3 &grid, int size, T*& cudaArray){
 }
 
 template <class T>
-void destroyCUDAMem(T*& cudaArray, T* arr, int size){
+void destroyCUDAMem(T*& cudaArray, T*& arr, int size){
 	cudaMemcpy(arr, cudaArray, sizeof(T) * size, cudaMemcpyDeviceToHost);
-	cudaFree(&cudaArray);
+	cudaFree(cudaArray);
 }
 
 template <class T>
@@ -104,6 +137,12 @@ void call(const char* name, T* arr, int size){
 	}
 	else if(strcmp(name, "merge") == 0){
 		IterMergeKernel<T><<<1, 1>>>(size, cudaArray);
+	}
+	else if(strncmp(name, "selection", 9) == 0){
+		SelectionKernel<T><<<1, 1>>>(size, cudaArray);
+	}
+	else if(strncmp(name, "insertion", 9) == 0){
+		InsertionKernel<T><<<1, 1>>>(size, cudaArray);
 	}
 
 	destroyCUDAMem(cudaArray, arr, size);
