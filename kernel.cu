@@ -2,6 +2,7 @@
 #define _KERNEL_H_
 
 #include <iostream>
+#include "cuda_runtime.h"
 #include "Test.h"
 
 using namespace std;
@@ -29,6 +30,47 @@ __global__ void InsertionKernel(){
 }
 
 template <class T>
+__global__ void IterMergeKernel(int size, T* arr){
+	int inc,left,leftMax,right,rightMax,cur;
+	T *temp = new T[size];
+	inc = 1;
+	while(inc < size){
+	    left = 0;
+	    right = inc;
+	    leftMax = right - 1;
+	    rightMax = (leftMax + inc < size) ? leftMax + inc : size - 1;
+	    cur = 0;
+	    while(cur < size){
+	        while(left <= leftMax && right <= rightMax){
+	            if(arr[right] < arr[left]){
+					temp[cur]=arr[right++];
+				}
+	            else{
+					temp[cur]=arr[left++];
+				}
+	            cur++;
+	        }
+	        while(right<=rightMax){
+				temp[cur++]=arr[right++];
+			}
+	        while(left<=leftMax){
+				temp[cur++]=arr[left++];
+			}
+	        left=right;
+	        right+=inc;
+	        leftMax=right-1;
+	        rightMax=(leftMax+inc<size)?leftMax+inc:size-1;
+	    }
+	    inc*=2;
+	    for(int i=0;i<size;i++){
+			arr[i]=temp[i];
+		}
+	}
+
+	delete[] temp;
+}
+
+template <class T>
 void createCUDAMem(T*& arr, dim3 &block, dim3 &grid, int size, T*& cudaArray){
 	cudaMalloc((void**)&cudaArray, sizeof(T) * size);
 	cudaMemcpy(cudaArray, arr, sizeof(T) * size, cudaMemcpyHostToDevice);
@@ -40,8 +82,6 @@ void createCUDAMem(T*& arr, dim3 &block, dim3 &grid, int size, T*& cudaArray){
 
 	if(error != cudaSuccess)
 		cout << "Cuda Error: " << cudaGetErrorString(error);
-
-	cout << sizeof(T) * size << " " << sizeof(arr) << endl;
 }
 
 template <class T>
@@ -52,13 +92,6 @@ void destroyCUDAMem(T*& cudaArray, T* arr, int size){
 
 template <class T>
 void call(const char* name, T* arr, int size){
-	for(int i = 0; i < size; ++i){
-		cout << arr[i] << endl;
-	}
-
-	cout << sizeof(arr) << " " << sizeof(T) << " " << sizeof(name) << endl;
-
-	cout << typeid(arr).name() << " " << typeid(T).name() << endl;
 
 	T* cudaArray;
 
@@ -66,18 +99,14 @@ void call(const char* name, T* arr, int size){
 
 	createCUDAMem(arr, block, grid, size, cudaArray);
 
-	cout << strcmp(name, "bubble");
-
 	if(strcmp(name, "bubble") == 0){
 		BubbleKernel<T><<<1, 1>>>(size, cudaArray);
 	}
+	else if(strcmp(name, "merge") == 0){
+		IterMergeKernel<T><<<1, 1>>>(size, cudaArray);
+	}
 
 	destroyCUDAMem(cudaArray, arr, size);
-
-	cout << "After bubble \n";
-	for(int i = 0; i < size; ++i){
-		cout << arr[i] << endl;
-	}
 }
 
 template void

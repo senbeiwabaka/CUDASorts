@@ -4,4 +4,4 @@ This project is focused on turning four sorting algorthims into parallel sorting
 
 You use this program on windows by running it in the command line. It can accept one argument. The argument can be -h or -help to explain to you should you forget what to do or it can be a .txt file which will file an array for the sorting. The .txt file must be in this format: #the type of data you are importing; then on the next line you start entering the data you want with spaces inbetween the values. If you do not specify an arguments then it will randomanly fill an integer and floating point array for testing the sorts.
 
-*Note: Because windows.h is being used, this can only be run on windows machines. *
+*Note: Must have a 2.0 or high CUDA Capable card.
