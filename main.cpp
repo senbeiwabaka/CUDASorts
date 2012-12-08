@@ -5,6 +5,7 @@
 #include <cuda.h>
 #include <string>
 #include <fstream>
+#include <ctime>
 #include "call.h"
 #include "Sorting.h"
 #include "Test.h"
@@ -19,9 +20,10 @@ const void choice(const char selection, Sorting<T>* s){
 		for(int i=0;i<s->Size();i++){
 		    cout<<s->toArray()[i]<<" ";
 		}
-
+		clock_t start=clock();
 		(*s).bubbleSort();
-
+		clock_t total=((clock())-start)/CLOCKS_PER_SEC;
+		cout<<"Time: "<<end*1000<<" ms"<<endl;
 		cout<<"\nBubble Sort After:  ";
 		for(int i=0;i<s->Size();i++){
 		    cout<<(*s).toArray()[i]<<" ";
