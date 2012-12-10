@@ -15,9 +15,6 @@ public:
 		arrSize = size;
 	}
 
-	Sorting(){
-	}
-
 	~Sorting(void){
 		delete[] unsorted;
 		delete[] sorted;
@@ -52,24 +49,6 @@ public:
 				sorted[j] = sorted[j - 1];
 				sorted[j - 1] = temp;
 				j--;
-			}
-		}
-	}
-
-	void selectionSort(){
-		int index;
-		T temp;
-		for(int i = 0; i < arrSize; ++i){
-			index = i;
-			for(int j = i + 1; j < arrSize; ++j){
-				if(sorted[j] < sorted[index]){
-					index = j;
-				}
-			}
-			if(index != i){
-				temp = sorted[i];
-				sorted[i] = sorted[index];
-				sorted[index] = temp;
 			}
 		}
 	}

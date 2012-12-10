@@ -2,150 +2,104 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <cuda.h>
 #include <string>
 #include <fstream>
-#include <ctime>
 #include "call.h"
 #include "Sorting.h"
-#include "Test.h"
 
 using namespace std;
+
+const int DISPLAY_SIZE = 10;
 
 template <class T>
 const void choice(const char selection, Sorting<T>* s){
 	if(selection == '1'){
 		//Bubble sort
 		cout<<"\nBubble Sort Before: ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<s->toArray()[i]<<" ";
 		}
-		clock_t start=clock();
+
+		clock_t start = clock();
+
 		(*s).bubbleSort();
-		clock_t total=((clock())-start)/CLOCKS_PER_SEC;
-		cout<<"Time: "<<end*1000<<" ms"<<endl;
+
+		clock_t total = clock();
+
 		cout<<"\nBubble Sort After:  ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
+		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
 
 		cout << endl;
 
 		(*s).resetArrays();
 
 		cout<<"\nBubble Sort Before: ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<s->toArray()[i]<<" ";
 		}
 
+		start = clock();
+
 		call<T>("bubble", s->toArray(), (*s).Size());
 
+		total = clock();
+
 		cout<<"\nBubble Sort After:  ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
 
 		cout << endl;
+
+		cout << (double)1000.0 * (total - start) / (double)CLOCKS_PER_SEC << endl;
 
 		s->resetArrays();
 	}
 	else if(selection == '2'){
 		//Merge sort
 		cout<<"\n\nMerge Sort Before: ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
 
+		clock_t start = clock();
+
 		(*s).iterMerge();
+
+		clock_t total = clock();
+
 		cout<<"\nMerge Sort After:  ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
+		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
 
 		(*s).resetArrays();
 
 		cout<<"\n\nMerge Sort Before: ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
+
 
 		call<T>("merge", s->toArray(), s->Size());
 
 		cout<<"\nMerge Sort After:  ";
-		for(int i=0;i<s->Size();i++){
+		for(int i=0;i<DISPLAY_SIZE;i++){
 		    cout<<(*s).toArray()[i]<<" ";
 		}
+
+		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
 
 		cout << endl;
 
 		s->resetArrays();
-	}
-	else if(selection == '3'){
-		//Insertion sort
-		cout<<"\n\nInsertion Sort Before: ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		(*s).insertionSort();
-
-		cout<<"\nInsertion Sort After:  ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		s->resetArrays();
-
-		cout<<"\n\nInsertion Sort Before: ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		call<T>("insertion", s->toArray(), s->Size());
-
-		cout<<"\nInsertion Sort After:  ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		cout << endl;
-
-		s->resetArrays();
-	}
-	else if(selection == '4'){
-		//Selection sort
-		cout<<"\n\nSelection Sort Before: ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		(*s).selectionSort();
-
-		cout<<"\nSelection Sort After:  ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		s->resetArrays();
-
-		cout<<"\n\nSelection Sort Before: ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		call<T>("selection", s->toArray(), s->Size());
-
-		cout<<"\nSelection Sort After:  ";
-		for(int i=0;i<s->Size();i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		cout << endl;
-
-		s->resetArrays();
-	}
-	else{
-		cout << "please enter the correct value";
 	}
 }
 
@@ -154,11 +108,9 @@ int main(int argc, char** argv)
 	int* intArray = NULL;
     double* doubleArray = NULL;
     char* charArray = NULL;
-	Test* testArray = NULL;
 	Sorting<int>* intSort;
 	Sorting<double>* doubleSort;
 	Sorting<char>* charSort;
-	Sorting<Test>* testSort;
 	char type = 0;
 
 	if(argc == 2){
@@ -403,16 +355,16 @@ int main(int argc, char** argv)
 
 
 	cout << "which algorithm do you want to sort by? " << endl;
-	cout << "1 bubble \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
+	cout << "1 bubble \n2 merge \n0 Quit" << endl;
 
 	char selection = 0;
 
 	cin >> selection;
 	
 	while(selection != '0'){
-		if(selection == '1' || selection == '2' || selection == '3' || selection == '4'){
+		if(selection == '1' || selection == '2'){
 			cout << "What type would you like to sort";
-			cout << "\n1 int \n2 double \n3 char \n4 Test \n0 Quit\n";
+			cout << "\n1 int \n2 double \n3 char \n0 Quit";
 			cin >> type;
 			if(type == '1')
 			{
@@ -425,23 +377,20 @@ int main(int argc, char** argv)
 			else if(type == '3'){
 				choice(selection, charSort);
 			}
-			else if(type == '4'){
-				//choice(selection, testSort);
-			}
-			else{
+			else if(type != '0'){
 				cout << "What type would you like to sort";
-				cout << "1 int \n2 double \n3 char \n4 Test \n0 Quit\n";
+				cout << "\n1 int \n2 double \n3 char \n0 Quit\n";
 				cin >> type;
 			}
 
 			cout << "which algorithm do you want to sort by? " << endl;
-			cout << "1 bubble \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
+			cout << "1 bubble \n2 merge \n0 Quit\n" << endl;
 
 			cin >> selection;
 		}
 		else{
 			cout << "which algorithm do you want to sort by? " << endl;
-			cout << "1 bubble \n2 merge \n3 insertion \n4 selection \n0 Quit\n" << endl;
+			cout << "1 bubble \n2 merge \n0 Quit" << endl;
 
 			cin >> selection;
 		}
