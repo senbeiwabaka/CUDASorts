@@ -14,33 +14,17 @@ const int DISPLAY_SIZE = 10;
 template <class T>
 const void choice(const char selection, Sorting<T>* s){
 	if(selection == '1'){
-		//Bubble sort
-		cout<<"\nBubble Sort Before: ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<s->toArray()[i]<<" ";
-		}
-
 		clock_t start = clock();
 
 		(*s).bubbleSort();
 
 		clock_t total = clock();
 
-		cout<<"\nBubble Sort After:  ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
+		cout << endl << "Host Time : " << total - start << endl;
 
 		cout << endl;
 
 		(*s).resetArrays();
-
-		cout<<"\nBubble Sort Before: ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<s->toArray()[i]<<" ";
-		}
 
 		start = clock();
 
@@ -48,56 +32,28 @@ const void choice(const char selection, Sorting<T>* s){
 
 		total = clock();
 
-		cout<<"\nBubble Sort After:  ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		cout << endl;
-
-		cout << (double)1000.0 * (total - start) / (double)CLOCKS_PER_SEC << endl;
+		cout << endl << "Device Time : " << total - start << endl << endl;
 
 		s->resetArrays();
 	}
 	else if(selection == '2'){
-		//Merge sort
-		cout<<"\n\nMerge Sort Before: ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
 		clock_t start = clock();
 
 		(*s).iterMerge();
 
 		clock_t total = clock();
 
-		cout<<"\nMerge Sort After:  ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
+		cout << endl << "Host Time : " << total - start << endl;
 
 		(*s).resetArrays();
 
-		cout<<"\n\nMerge Sort Before: ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
-
-
+		start = clock();
 
 		call<T>("merge", s->toArray(), s->Size());
 
-		cout<<"\nMerge Sort After:  ";
-		for(int i=0;i<DISPLAY_SIZE;i++){
-		    cout<<(*s).toArray()[i]<<" ";
-		}
+		total = clock();
 
-		cout << "time : " << (double)1000 * (total - start) / CLOCKS_PER_SEC << endl;
-
-		cout << endl;
+		cout << endl << "Device Time : " << total - start << endl << endl;
 
 		s->resetArrays();
 	}
@@ -112,6 +68,11 @@ int main(int argc, char** argv)
 	Sorting<double>* doubleSort;
 	Sorting<char>* charSort;
 	char type = 0;
+
+	char alphabet[]={'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m',
+        'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
 	if(argc == 2){
 		string arg = argv[1];
@@ -351,6 +312,20 @@ int main(int argc, char** argv)
 		myfile.close();
 	}
 	else{
+		int size = 1024;
+		intArray = new int[size];
+		doubleArray = new double[size];
+		charArray = new char[size];
+
+		for(int i = 0; i < size; ++i){
+			intArray[i] = (rand()%1000)+1;
+			doubleArray[i] = ((double)(rand()%100+1)/101)*100.0;
+			charArray[i] = alphabet[rand()%52];
+		}
+
+		intSort = new Sorting<int>(intArray, size);
+		doubleSort = new Sorting<double>(doubleArray, size);
+		charSort = new Sorting<char>(charArray, size);
 	}
 
 
@@ -364,10 +339,9 @@ int main(int argc, char** argv)
 	while(selection != '0'){
 		if(selection == '1' || selection == '2'){
 			cout << "What type would you like to sort";
-			cout << "\n1 int \n2 double \n3 char \n0 Quit";
+			cout << "\n1 int \n2 double \n3 char \n0 Quit" << endl;
 			cin >> type;
-			if(type == '1')
-			{
+			if(type == '1'){
 				choice(selection, intSort);
 			}
 			else if(type == '2')
@@ -379,7 +353,7 @@ int main(int argc, char** argv)
 			}
 			else if(type != '0'){
 				cout << "What type would you like to sort";
-				cout << "\n1 int \n2 double \n3 char \n0 Quit\n";
+				cout << "\n1 int \n2 double \n3 char \n0 Quit" << endl;
 				cin >> type;
 			}
 
