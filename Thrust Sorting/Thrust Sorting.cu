@@ -9,6 +9,8 @@
 struct Test{
 	int key;
 	float value;
+	double value1;
+	char value2;
 	
 	__host__ __device__
 	bool operator<(const Test other) const{
@@ -16,25 +18,25 @@ struct Test{
 	}
 };
 
-void initlialize(thrust::device_vector<Test>& structures){
+void initlialize(thrust::host_vector<Test>& structures){
 	thrust::default_random_engine rng;
 	thrust::uniform_int_distribution<int> dist(0, 2147483647);
+	char alphabet[]={'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m',
+        'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	
-	thrust::host_vector<Test> h_structures(structures.size());
-	
-	for(size_t i = 0; i < h_structures.size(); i++){
-		h_structures[i].key = (rand()%100)+1;
-		h_structures[i].value = ((float)(rand()%100+1)/101)*100.0;
-		
-		std::cout << h_structures[i].key << " key" << std::endl;
-		std::cout << h_structures[i].value << " value" << std::endl;
+	for(size_t i = 0; i < structures.size(); i++){
+		structures[i].key = (rand()%100)+1;
+		structures[i].value = ((float)(rand()%100+1)/101)*100.0;
+		structures[i].value1 = ((double)(rand()%100+1)/101)*100.0;
+		structures[i].value2 = alphabet[rand()%52];
 	}
-	
-	structures = h_structures;
 }
 
 int main(int argc, char** argv){
 	srand((unsigned)time(0));
+	clock_t start, end;
 	
 	thrust::host_vector<Test> testH;
 	thrust::host_vector<double> doubleH;
@@ -49,26 +51,33 @@ int main(int argc, char** argv){
         'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		
 	if(argc == 2){
-		testH = thrust::host_vector<Test>(atoi(argv[1]));
-		doubleH = thrust::host_vector<double>(atoi(argv[1]));
-		charH = thrust::host_vector<char>(atoi(argv[1]));
-		
-		testD = thrust::device_vector<Test>(atoi(argv[1]));
-		doubleD = thrust::device_vector<double>(atoi(argv[1]));
-		charD = thrust::device_vector<char>(atoi(argv[1]));
-		
-		for(int i = 0; i < atoi(argv[1]); ++i){
-			doubleH[i] = ((double)(rand()%100+1)/101)*100.0;
-			charH[i] = alphabet[rand()%52];
+		if(strncmp(argv[1], "-help", 5) == 0 || strncmp(argv[1], "-h", 2) == 0){
+			std::cout << "You can either enter a value for the size of the arrays to be sorted or leave it blank and it will generate arrays to be sorted of size around 20 million values";
+			
+			std::exit(0);
 		}
-		
-		doubleD = doubleH;
-		charD = charH;
-		
-		initlialize(testD);
+		else{
+			testH = thrust::host_vector<Test>(atoi(argv[1]));
+			doubleH = thrust::host_vector<double>(atoi(argv[1]));
+			charH = thrust::host_vector<char>(atoi(argv[1]));
+			
+			testD = thrust::device_vector<Test>(atoi(argv[1]));
+			doubleD = thrust::device_vector<double>(atoi(argv[1]));
+			charD = thrust::device_vector<char>(atoi(argv[1]));
+			
+			for(int i = 0; i < atoi(argv[1]); ++i){
+				doubleH[i] = ((double)(rand()%100+1)/101)*100.0;
+				charH[i] = alphabet[rand()%52];
+			}
+			
+			doubleD = doubleH;
+			charD = charH;
+			
+			initlialize(testH);
+		}
 	}
 	else{
-		int N = 32;
+		size_t N = 128;
 		testH = thrust::host_vector<Test>(N);
 		doubleH = thrust::host_vector<double>(N);
 		charH = thrust::host_vector<char>(N);
@@ -77,21 +86,105 @@ int main(int argc, char** argv){
 		doubleD = thrust::device_vector<double>(N);
 		charD = thrust::device_vector<char>(N);
 		
-		initlialize(testD);
+		initlialize(testH);
 	}
+
+	char selection = '0';
 	
-	thrust::sort(testD.begin(), testD.end());
+	std::cout << "What would you like to sort?" << std::endl;
+	std::cout << "1 char \n2 double \n3 complex object \n0 quit?" << std::endl;
+	std::cin >> selection;
 	
-	thrust::copy(testD.begin(), testD.end(), testH.begin());
+	while(selection != '0'){
+		if(selection == '1'){
+			thrust::host_vector<char> nonsort(charH.size());
+			
+			nonsort = charH;
+			
+			start = clock();
+			
+			thrust::sort(charH.begin(), charH.end());
+			
+			end = clock();
+			
+			std::cout << std::endl << "Time for host sort " << end - start << " milliseconds" << std::endl;
+			
+			start = clock();
+			
+			testD = nonsort;
+			
+			thrust::sort(testD.begin(), testD.end());
+			
+			thrust::copy(testD.begin(), testD.end(), nonsort.begin());
+			
+			end = clock();
+			
+			std::cout << "Time for device sort " << end - start << " milliseconds" << std::endl << std::endl;
+			
+			std::cout << "What would you like to sort?" << std::endl;
+			std::cout << "1 char \n2 double \n3 complex object \n0 quit?" << std::endl;
+			std::cin >> selection;
+		}
+		else if(selection == '2'){
+			start = clock();
+			
+			thrust::sort(testH.begin(), testH.end());
+			
+			end = clock();
+			
+			std::cout << std::endl << "Time for host sort " << end - start << " milliseconds" << std::endl;
+			
+			start = clock();
+			
+			testD = nonsort;
+			
+			thrust::sort(testD.begin(), testD.end());
+			
+			thrust::copy(testD.begin(), testD.end(), nonsort.begin());
+			
+			end = clock();
+			
+			std::cout << "Time for device sort " << end - start << " milliseconds" << std::endl << std::endl;
+			
+			std::cout << "What would you like to sort?" << std::endl;
+			std::cout << "1 char \n2 double \n3 complex object \n0 quit?" << std::endl;
+			std::cin >> selection;
+		}
+		else if(selection == '3'){
+			thrust::host_vector<Test> nonsort(testH.size());
 	
-	std::cout << std::endl;
-	
-	for(int i = 0; i < testH.size(); ++i){
-		std::cout << testH[i].key << " key" << std::endl;
-		std::cout << testH[i].value << " value" << std::endl;
+			nonsort = testH;
+			
+			start = clock();
+			
+			thrust::sort(testH.begin(), testH.end());
+			
+			end = clock();
+			
+			std::cout << std::endl << "Time for host sort " << end - start << " milliseconds" << std::endl;
+			
+			start = clock();
+			
+			testD = nonsort;
+			
+			thrust::sort(testD.begin(), testD.end());
+			
+			thrust::copy(testD.begin(), testD.end(), nonsort.begin());
+			
+			end = clock();
+			
+			std::cout << "Time for device sort " << end - start << " milliseconds" << std::endl << std::endl;
+			
+			std::cout << "What would you like to sort?" << std::endl;
+			std::cout << "1 char \n2 double \n3 complex object \n0 quit?" << std::endl;
+			std::cin >> selection;
+		}
+		else{
+			std::cout << "What would you like to sort?" << std::endl;
+			std::cout << "1 char \n2 double \n3 complex object \n0 quit?" << std::endl;
+			std::cin >> selection;
+		}
 	}
-	
-	std::cout << std::endl << "Worked!";
 
     return 0;
 }
