@@ -7,7 +7,7 @@ using namespace std;
 
 int main(){
     srand((unsigned)time(0));
-    int num= (int)pow(2.0, (double)(rand()%15)+2); //(int)(pow(2,(rand()%15)+2));
+    int num = 1024; //(int)pow(2.0, (double)(rand()%15)+2);
     char alphabet[]={'A','B','C','D','E','F','G','H','I','J','K','L','M',
         'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
         'a','b','c','d','e','f','g','h','i','j','k','l','m',
