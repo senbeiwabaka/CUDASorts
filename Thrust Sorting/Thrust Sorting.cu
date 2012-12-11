@@ -111,11 +111,11 @@ int main(int argc, char** argv){
 			
 			start = clock();
 			
-			testD = nonsort;
+			charD = nonsort;
 			
-			thrust::sort(testD.begin(), testD.end());
+			thrust::sort(charD.begin(), charD.end());
 			
-			thrust::copy(testD.begin(), testD.end(), nonsort.begin());
+			thrust::copy(charD.begin(), charD.end(), nonsort.begin());
 			
 			end = clock();
 			
@@ -126,9 +126,12 @@ int main(int argc, char** argv){
 			std::cin >> selection;
 		}
 		else if(selection == '2'){
+			thrust::host_vector<char> nonsort(doubleH.size());
+			nonsort = doubleH;
+			
 			start = clock();
 			
-			thrust::sort(testH.begin(), testH.end());
+			thrust::sort(doubleH.begin(), doubleH.end());
 			
 			end = clock();
 			
@@ -136,11 +139,11 @@ int main(int argc, char** argv){
 			
 			start = clock();
 			
-			testD = nonsort;
+			doubleD = nonsort;
 			
-			thrust::sort(testD.begin(), testD.end());
+			thrust::sort(doubleD.begin(), doubleD.end());
 			
-			thrust::copy(testD.begin(), testD.end(), nonsort.begin());
+			thrust::copy(doubleD.begin(), doubleD.end(), nonsort.begin());
 			
 			end = clock();
 			
