@@ -5,11 +5,11 @@
 
 using namespace std;
 
+//Odd-even Bubble Sort
 template <class T>
 __global__ void BubbleKernel(int size, T* arr){
 	int id = blockDim.x * blockIdx.x + threadIdx.x;
 
-	//run the sorting algorithm  for ARRAY_SIZE^2
 	for(int i = 0; i < size; i++)
 	{
 	  //check if the thread id number is even
@@ -40,6 +40,7 @@ __global__ void BubbleKernel(int size, T* arr){
 	}
 }
 
+// Puts the array back together
 template <class T>
 __device__ void Merge(T* arr, T* results, int l, int r, int u){
 	int i,j,k;
@@ -54,22 +55,22 @@ __device__ void Merge(T* arr, T* results, int l, int r, int u){
 	  k++;
 	}
 	
-	while (i<r) { 
+	while (i<r){ 
 	  results[k]=arr[i]; i++; k++;
 	}
 	
-	while (j<u) { 
+	while (j<u){ 
 	  results[k]=arr[j]; j++; k++;
 	}
-	for (k=l; k<u; k++) { 
+	for (k=0; k<u; k++){ 
 	  arr[k]=results[k]; 
 	}
 }
 
-//come back to this one
+//Iterative Merge Sort
 template <class T>
 __global__ void IterMergeKernel(int size, T* arr){
-    int tid = threadIdx.x;
+    int id = blockDim.x * blockIdx.x + threadIdx.x;
     int k,u,i;
 
 	T* results = new T[size];
@@ -87,68 +88,93 @@ __global__ void IterMergeKernel(int size, T* arr){
             }
             Merge(arr, results, i, i+k, u);
             i = i+k*2;
+			__syncthreads();
         }
         k = k*2;
         __syncthreads();
     }
 }
 
+//create the memory on the device and copy the values over
+//will also return the error if there is one (being not being able to allocate memory or whatever else)
 template <class T>
 void createCUDAMem(T*& arr, int size, T*& cudaArray){
 	cudaError_t error;
 
 	error = cudaMalloc((void**)&cudaArray, sizeof(T) * size);
 
-	if(error != cudaSuccess)
+	if(error != cudaSuccess){
 		cout << "Cuda Error: " << cudaGetErrorString(error);
+	}
 
 	error = cudaMemcpy(cudaArray, arr, sizeof(T) * size, cudaMemcpyHostToDevice);
 
-	if(cudaArray == 0)
+	if(cudaArray == 0){
 		cout << "couldn't allocate memory";
+	}
 
-	if(error != cudaSuccess)
+	if(error != cudaSuccess){
 		cout << "Cuda Error: " << cudaGetErrorString(error);
+	}
 }
 
+//to copy memory back and free memory on device
+//will tell error
 template <class T>
 void destroyCUDAMem(T*& cudaArray, T*& arr, int size){
 	cudaError_t error;
 	error = cudaMemcpy(arr, cudaArray, sizeof(T) * size, cudaMemcpyDeviceToHost);
 
-	if(error != cudaSuccess)
-		cout << "Cuda Error: " << cudaGetErrorString(error);
+	if(error != cudaSuccess){
+		cout << "Cuda Memory Device to Host Error: " << cudaGetErrorString(error) << endl;
+	}
+
 	error = cudaFree(cudaArray);
+
+	if(error != cudaSuccess){
+		cout << "Cuda Destroy error: " << cudaGetErrorString(error) << endl;
+	}
 }
 
+//templated class that calls the correct kernel. also sets the grid and block based off the size which is a power of 2
 template <class T>
 void call(const char* name, T* arr, int size){
 
 	T* cudaArray;
 
 	dim3 grid(1, 1);
-	dim3 block(size / 2, 1);
+	dim3 block(1, 1);
+
+	if(size > 2048){
+		int n = (size / 2) / 1024;
+		grid = dim3(n, 1);
+		block = dim3(1024, 1);
+	}
+	else{
+		block = dim3(size/2,1);
+	}
 
 	createCUDAMem(arr, size, cudaArray);
 
 	if(strcmp(name, "bubble") == 0){
 		BubbleKernel<T><<<grid, block>>>(size, cudaArray);
+		cudaThreadSynchronize();
 	}
 	else if(strcmp(name, "merge") == 0){
 		IterMergeKernel<T><<<grid, block>>>(size, cudaArray);
+		cudaThreadSynchronize();
 	}
-
-	cudaThreadSynchronize();
 
 	cudaError_t wrong = cudaGetLastError();
 
-	if(wrong != cudaSuccess)
-	{
+	if(wrong != cudaSuccess){
 		cout << cudaGetErrorString(wrong) << endl;
 	}
 
 	destroyCUDAMem(cudaArray, arr, size);
 }
+
+//the types of values that are accepted for the kernel calling function
 
 template void
 call<int>(const char* name, int *arr, int size);

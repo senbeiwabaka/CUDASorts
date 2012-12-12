@@ -1,11 +1,12 @@
 #ifndef __SORTING_H_
 #define __SORTING_H_
 
+//sorting class that is templated
 template <class T>
 class Sorting
 {
 public:
-	//template <void>
+	//takes in any data type and a size then sets two arrays. one for sorting and the other to reset the sorted array
 	Sorting<T>(T* values, int size){
 		unsorted = values;
 		sorted = new T[size];
@@ -20,6 +21,7 @@ public:
 		delete[] sorted;
 	}
 
+	//bubble sort
 	void bubbleSort(){
             bool swap=true;
             int x=0;
@@ -39,20 +41,7 @@ public:
             }
         }
 
-	void insertionSort(){
-		int j;
-		T temp;
-		for(int i = 1; i < arrSize; ++i){
-			j = i;
-			while(j > 0 && sorted[j - 1] > sorted[j]){
-				temp = sorted[j];
-				sorted[j] = sorted[j - 1];
-				sorted[j - 1] = temp;
-				j--;
-			}
-		}
-	}
-
+	//iterative merge sort
 	void iterMerge(){
 		int inc,left,leftMax,right,rightMax,cur;
 		T *temp = new T[arrSize];
@@ -92,25 +81,28 @@ public:
 		delete[] temp;
 	}
 
+	//returns the array
 	T* toArray(){
 		return sorted;
 	}
 
-	void resetArrays()
-	{
-		//cout<<arrSize << endl;
+	//sets the sorted array to the unsorted array
+	void resetArrays(){
 		for(int i = 0; i < arrSize; ++i){
 			sorted[i] = unsorted[i];
 		}
 	}
 
+	//returns array size
 	const int Size(){
 		return arrSize;
 	}
 
 
 private:
+	//for resetting sorted array
 	T* unsorted;
+	//the array to be sorted
 	T* sorted;
 
 	int arrSize;

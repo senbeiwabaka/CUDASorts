@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <math.h>
@@ -21,6 +20,7 @@ int main(){
         outInt<<(rand()%100)+1<<" ";
     }
     outInt.close();
+
     //Randomizer for doubles (doubleTest.txt)
     ofstream outDbl("C:/Users/Michael/Desktop/doubleTest.txt");
     outDbl<<"double "<<num<<endl;
@@ -28,6 +28,7 @@ int main(){
         outDbl<<((double)(rand()%100+1)/101)*100.0<<" ";
     }
     outDbl.close();
+
     //Randomizer for characters (charTest.txt)
     ofstream outChar("C:/Users/Michael/Desktop/charTest.txt");
     outChar<<"char "<<num<<endl;
@@ -35,6 +36,6 @@ int main(){
         outChar<<alphabet[rand()%52]<<" ";
     }
     outChar.close();
+
     return 0;
 }
-

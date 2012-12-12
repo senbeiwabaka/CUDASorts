@@ -1,6 +1,4 @@
 #include <iostream>
-#include <cmath>
-#include <cstdlib>
 #include <ctime>
 #include <string>
 #include <fstream>
@@ -9,14 +7,14 @@
 
 using namespace std;
 
-const int DISPLAY_SIZE = 10;
-
+//runs for which sorting algorithm you want to test
 template <class T>
 const void choice(const char selection, Sorting<T>* s){
+	//for bubble sort
 	if(selection == '1'){
 		clock_t start = clock();
 
-		(*s).bubbleSort();
+		s->bubbleSort();
 
 		clock_t total = clock();
 
@@ -24,11 +22,11 @@ const void choice(const char selection, Sorting<T>* s){
 
 		cout << endl;
 
-		(*s).resetArrays();
+		s->resetArrays();
 
 		start = clock();
 
-		call<T>("bubble", s->toArray(), (*s).Size());
+		call<T>("bubble", s->toArray(), s->Size());
 
 		total = clock();
 
@@ -36,16 +34,17 @@ const void choice(const char selection, Sorting<T>* s){
 
 		s->resetArrays();
 	}
+	//merge sort
 	else if(selection == '2'){
 		clock_t start = clock();
 
-		(*s).iterMerge();
+		s->iterMerge();
 
 		clock_t total = clock();
 
 		cout << endl << "Host Time : " << total - start << endl;
 
-		(*s).resetArrays();
+		s->resetArrays();
 
 		start = clock();
 
@@ -59,8 +58,8 @@ const void choice(const char selection, Sorting<T>* s){
 	}
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
+	//variable declaration
 	int* intArray = NULL;
     double* doubleArray = NULL;
     char* charArray = NULL;
@@ -74,6 +73,7 @@ int main(int argc, char** argv)
         'a','b','c','d','e','f','g','h','i','j','k','l','m',
         'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
+	//argument checking. also loads files into their respective arrays
 	if(argc == 2){
 		string arg = argv[1];
 		if(arg == "-help" || arg == "-h"){
@@ -312,7 +312,7 @@ int main(int argc, char** argv)
 		myfile.close();
 	}
 	else{
-		int size = 1024;
+		int size = 16;
 		intArray = new int[size];
 		doubleArray = new double[size];
 		charArray = new char[size];
@@ -336,11 +336,13 @@ int main(int argc, char** argv)
 
 	cin >> selection;
 	
+	//loop to continuely choose the sorting you want to do
 	while(selection != '0'){
 		if(selection == '1' || selection == '2'){
 			cout << "What type would you like to sort";
 			cout << "\n1 int \n2 double \n3 char \n0 Quit" << endl;
 			cin >> type;
+
 			if(type == '1'){
 				choice(selection, intSort);
 			}
@@ -369,6 +371,8 @@ int main(int argc, char** argv)
 			cin >> selection;
 		}
 	}
+
+	//clearing of memory
 
 	if(intArray != NULL){
 		delete[] intArray;
